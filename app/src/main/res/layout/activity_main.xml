@@ -21,13 +21,13 @@
         app:layout_constraintVertical_bias="0.862">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btnTeacherLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Teacher Login" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnStudentLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Student Login" />
