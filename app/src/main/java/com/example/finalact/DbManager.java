@@ -18,8 +18,8 @@ public class DbManager {
     private final int DBVER = 1;
     private final String TBLNAME = "students";
     private final String SID = "id";
-    private final String SFNAME = "fname";
-    private final String SLNAME = "lname";
+    private final String SUNAME = "username";
+    private final String PWD = "password";
 
     public DbManager(Context context) {
         this.context = context;
@@ -29,8 +29,8 @@ public class DbManager {
 
     public void addRow(String n, String ln){
         ContentValues values = new ContentValues();
-        values.put(SFNAME, n);
-        values.put(SLNAME, ln);
+        values.put(SUNAME, n);
+        values.put(PWD, ln);
         try {
             db.insert(TBLNAME, null, values);
         } catch (Exception e){
@@ -50,8 +50,8 @@ public class DbManager {
 
     public void updateRow(long id, String n, String ln) {
         ContentValues values = new ContentValues();
-        values.put(SFNAME, n);
-        values.put(SLNAME, ln);
+        values.put(SUNAME, n);
+        values.put(PWD, ln);
         try {
             db.update(TBLNAME, values, SID + "=" + id, null);
         } catch (Exception e) {
@@ -67,7 +67,7 @@ public class DbManager {
         try {
             cursor = db.query(
                     TBLNAME,
-                    new String[] { SID, SFNAME, SLNAME },
+                    new String[] { SID, SUNAME, PWD },
                     SID + "=" + id,
                     null, null, null, null, null
                     );
@@ -95,7 +95,7 @@ public class DbManager {
         try {
             cursor = db.query(
                     TBLNAME,
-                    new String[]{SID, SFNAME, SLNAME},
+                    new String[]{SID, SUNAME, PWD},
                     null, null, null, null, null
             );
             cursor.moveToFirst();
@@ -124,7 +124,7 @@ public class DbManager {
         }
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String sql = "CREATE TABLE " + TBLNAME + "(" + SID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + SFNAME + " TEXT, " + SLNAME + " TEXT);";
+            String sql = "CREATE TABLE " + TBLNAME + "(" + SID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + SUNAME + " TEXT, " + PWD + " TEXT);";
             db.execSQL(sql);
         }
         @Override
