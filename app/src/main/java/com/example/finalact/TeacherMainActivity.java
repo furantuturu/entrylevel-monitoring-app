@@ -17,7 +17,7 @@ public class TeacherMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_main);
 
-//        message = findViewById(R.id.)
+        message = findViewById(R.id.)
 
     }
 }
