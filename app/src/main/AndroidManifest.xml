@@ -23,6 +23,10 @@
             android:name=".TeacherLoginActivity"
             android:exported="false" />
         <activity
+            android:name=".SubjectSelectionActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="false" />
+        <activity
             android:name=".QRCodeActivity"
             android:exported="false" />
         <activity
