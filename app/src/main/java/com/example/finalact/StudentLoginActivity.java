@@ -26,7 +26,7 @@ public class StudentLoginActivity extends AppCompatActivity {
         txtView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(StudentLoginActivity.this , ForgotPassword.class);
+                intent = new Intent(StudentLoginActivity.this , ForgotPasswordStudent.class);
                 startActivity(intent);
 
             }
