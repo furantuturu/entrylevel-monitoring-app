@@ -9,17 +9,19 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.SplittableRandom;
 
 public class DbManager {
     Context context;
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
 
-    private final String DBNAME = "studentdb";
+    private final String DBNAME = "appdb";
     private final int DBVER = 1;
     private final String TBLNAME = "students";
     private final String SID = "id";
-    private final String SUNAME = "username";
+    private final String STUNAME = "studentname";
     private final String PWD = "password";
+    private final String ACCESS = "access";
 
     public DbManager(Context context) {
         this.context = context;
@@ -27,10 +29,11 @@ public class DbManager {
         this.db = helper.getWritableDatabase();
     }
 
-    public void addRow(String n, String ln){
+    public void addRow(String name, String pwd, int access){
         ContentValues values = new ContentValues();
-        values.put(SUNAME, n);
-        values.put(PWD, ln);
+        values.put(STUNAME, name);
+        values.put(PWD, pwd);
+        values.put(ACCESS, access);
         try {
             db.insert(TBLNAME, null, values);
         } catch (Exception e){
@@ -48,10 +51,11 @@ public class DbManager {
         }
     }
 
-    public void updateRow(long id, String n, String ln) {
+    public void updateRow(long id, String n, String pwd, int access) {
         ContentValues values = new ContentValues();
-        values.put(SUNAME, n);
-        values.put(PWD, ln);
+        values.put(STUNAME, n);
+        values.put(PWD, pwd);
+        values.put(ACCESS, access);
         try {
             db.update(TBLNAME, values, SID + "=" + id, null);
         } catch (Exception e) {
@@ -67,7 +71,7 @@ public class DbManager {
         try {
             cursor = db.query(
                     TBLNAME,
-                    new String[] { SID, SUNAME, PWD },
+                    new String[] { SID, STUNAME },
                     SID + "=" + id,
                     null, null, null, null, null
                     );
@@ -95,7 +99,7 @@ public class DbManager {
         try {
             cursor = db.query(
                     TBLNAME,
-                    new String[]{SID, SUNAME, PWD},
+                    new String[]{SID, STUNAME, PWD},
                     null, null, null, null, null
             );
             cursor.moveToFirst();
@@ -124,7 +128,7 @@ public class DbManager {
         }
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String sql = "CREATE TABLE " + TBLNAME + "(" + SID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + SUNAME + " TEXT, " + PWD + " TEXT);";
+            String sql = "CREATE TABLE " + TBLNAME + "(" + SID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " + STUNAME + " TEXT, " + PWD + " TEXT, " + ACCESS + " INTEGER);";
             db.execSQL(sql);
         }
         @Override
