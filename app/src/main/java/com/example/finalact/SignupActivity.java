@@ -1,8 +1,13 @@
 package com.example.finalact;
 
+import static java.lang.Integer.parseInt;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,10 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class SignupActivity extends AppCompatActivity {
     EditText etUnameSI, etPwdSI;
     Button btnTecSI, btnStuSI;
     DbManager db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +43,13 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!etUnameSI.getText().toString().equals("") || !etPwdSI.getText().toString().equals("")) {
-                    try {
-                        db.addRow(etUnameSI.getText().toString(), etPwdSI.getText().toString(), 0);
-                        Intent intent = new Intent(SignupActivity.this, StudentLoginActivity.class);
+                    String uname = etUnameSI.getText().toString();
+                    String pwd = etPwdSI.getText().toString();
 
+                    try {
+                        db.addRow(uname, pwd, 0);
+
+                        Intent intent = new Intent(SignupActivity.this, StudentLoginActivity.class);
                         Toast.makeText(SignupActivity.this, "Successfully Signed Up", Toast.LENGTH_SHORT).show();
                         startActivity(intent);
                     } catch (Exception e) {
