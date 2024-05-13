@@ -40,16 +40,17 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        android:id="@+id/BTNenterclass"
+        android:layout_width="326dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="113dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="114dp"
+        android:layout_marginEnd="11dp"
         android:layout_marginBottom="49dp"
         android:text="Enter Class"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CameraPreview" />
+        app:layout_constraintTop_toBottomOf="@+id/CameraPreview"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>
