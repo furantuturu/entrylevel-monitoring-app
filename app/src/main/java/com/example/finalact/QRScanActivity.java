@@ -14,10 +14,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Size;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,6 +37,7 @@ import java.util.concurrent.ExecutionException;
 
 public class QRScanActivity extends AppCompatActivity {
     EditText qrcodeET;
+    Button btnEnterClass;
     PreviewView cameraPreviewView;
     ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture;
     @Override
@@ -42,6 +46,7 @@ public class QRScanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_qrscan);
 
         qrcodeET = findViewById(R.id.ETcode);
+        btnEnterClass = findViewById(R.id.BTNenterclass);
         cameraPreviewView = findViewById(R.id.CameraPreview);
 
         // checking camera permissions
@@ -50,7 +55,24 @@ public class QRScanActivity extends AppCompatActivity {
         } else {
             ActivityCompat.requestPermissions(QRScanActivity.this, new String[]{Manifest.permission.CAMERA}, 101);
         }
+
+        listeners();
     }
+
+    private void listeners() {
+        btnEnterClass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (qrcodeET.getText().toString().equals("018f51fb-2a6c-7af0-ba64-0c9d88739aea")) {
+                    Intent intent = new Intent(QRScanActivity.this, WelcomeActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(QRScanActivity.this, "Invalid Class Code", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
 
     private void init(){
         cameraProviderListenableFuture = ProcessCameraProvider.getInstance(QRScanActivity.this);
