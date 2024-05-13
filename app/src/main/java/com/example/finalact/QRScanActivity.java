@@ -14,7 +14,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import android.util.Size;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,18 +39,28 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class QRScanActivity extends AppCompatActivity {
+    TextView studentName;
     EditText qrcodeET;
     Button btnEnterClass;
     PreviewView cameraPreviewView;
     ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture;
+    public static final String MyPREFERENCES = "MYPREFS";
+    SharedPreferences sharedPreferences;
+    String spUname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan);
 
+        studentName = findViewById(R.id.TVstudentname);
         qrcodeET = findViewById(R.id.ETcode);
         btnEnterClass = findViewById(R.id.BTNenterclass);
         cameraPreviewView = findViewById(R.id.CameraPreview);
+
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        spUname = sharedPreferences.getString(StudentLoginActivity.UNAME, null);
+
+        studentName.setText(spUname);
 
         // checking camera permissions
         if (ContextCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
