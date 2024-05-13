@@ -64,7 +64,7 @@ public class DbManager {
         }
     }
 
-    public ArrayList<Object> getRowAsArray(long id) {
+    public ArrayList<Object> getRowAsArray(String n) {
         ArrayList<Object> rowArray = new ArrayList<>();
         Cursor cursor;
 
@@ -72,7 +72,7 @@ public class DbManager {
             cursor = db.query(
                     TBLNAME,
                     new String[] { SID, STUNAME },
-                    SID + "=" + id,
+                    STUNAME + "=" + n,
                     null, null, null, null, null
                     );
             cursor.moveToFirst();
