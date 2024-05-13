@@ -53,13 +53,16 @@ public class TeacherLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                Intent intent = new Intent(TeacherLoginActivity.this , SubjectSelectionActivity.class);
+                startActivity(intent);
+
             }
         });
 
         btnTecSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent = new Intent(TeacherLoginActivity.this, SignupActivity.class);
+                intent = new Intent(TeacherLoginActivity.this, TeacherSignUpActivity.class);
                 startActivity(intent);
             }
         });

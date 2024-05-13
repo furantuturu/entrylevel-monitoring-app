@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    tools:context=".TeacherSignUpActivity">
 
     <TextView
         android:id="@+id/textView25"
@@ -20,7 +20,7 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="130dp"
         android:layout_marginBottom="33dp"
-        android:text="Sign Up"
+        android:text="Teacher Sign Up"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView19"
@@ -95,29 +95,18 @@
         app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
     <Button
-        android:id="@+id/BTNtecSI"
-        android:layout_width="325dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="11dp"
-        android:layout_marginTop="78dp"
-        android:layout_marginEnd="11dp"
-        android:text="Sign Up as a Teacher"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ETpwdSI" />
-
-    <Button
         android:id="@+id/BTNstuSI"
         android:layout_width="326dp"
         android:layout_height="45dp"
         android:layout_marginStart="11dp"
-        android:layout_marginTop="9dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="160dp"
-        android:text="Sign Up as a Student"
+        android:layout_marginBottom="220dp"
+        android:text="Sign up now"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/BTNtecSI" />
+        app:layout_constraintTop_toBottomOf="@+id/ETpwdSI" />
 </androidx.constraintlayout.widget.ConstraintLayout>
