@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Size;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -47,10 +49,13 @@ public class QRScanActivity extends AppCompatActivity {
     public static final String MyPREFERENCES = "MYPREFS";
     SharedPreferences sharedPreferences;
     String spUname;
+    DbManager db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan);
+
+        db = new DbManager(this);
 
         studentName = findViewById(R.id.TVstudentname);
         qrcodeET = findViewById(R.id.ETcode);
@@ -60,7 +65,7 @@ public class QRScanActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         spUname = sharedPreferences.getString(StudentLoginActivity.UNAME, null);
 
-        studentName.setText(spUname);
+        studentName.setText("Welcome, " + spUname.substring(0, 1).toUpperCase() + spUname.substring(1).toLowerCase());
 
         // checking camera permissions
         if (ContextCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -77,8 +82,16 @@ public class QRScanActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (qrcodeET.getText().toString().equals("018f51fb-2a6c-7af0-ba64-0c9d88739aea")) {
-                    Intent intent = new Intent(QRScanActivity.this, WelcomeActivity.class);
-                    startActivity(intent);
+                    try {
+                        db.updateRow(1);
+
+                        Intent intent = new Intent(QRScanActivity.this, WelcomeActivity.class);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        Log.e("DB Error", e.toString());
+                        e.printStackTrace();
+                    }
+
                 } else {
                     Toast.makeText(QRScanActivity.this, "Invalid Class Code", Toast.LENGTH_SHORT).show();
                 }
