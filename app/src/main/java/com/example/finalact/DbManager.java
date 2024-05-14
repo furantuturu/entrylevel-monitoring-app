@@ -51,13 +51,11 @@ public class DbManager {
         }
     }
 
-    public void updateRow(long id, String n, String pwd, int access) {
+    public void updateRow(int access) {
         ContentValues values = new ContentValues();
-        values.put(STUNAME, n);
-        values.put(PWD, pwd);
         values.put(ACCESS, access);
         try {
-            db.update(TBLNAME, values, SID + "=" + id, null);
+            db.update(TBLNAME, values, ACCESS + " = " + access, null);
         } catch (Exception e) {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
@@ -71,8 +69,8 @@ public class DbManager {
         try {
             cursor = db.query(
                     TBLNAME,
-                    new String[] { SID, STUNAME },
-                    STUNAME + "=" + n,
+                    new String[] { SID, STUNAME, PWD },
+                    STUNAME + " = " + "\"" + n + "\"",
                     null, null, null, null, null
                     );
             cursor.moveToFirst();
