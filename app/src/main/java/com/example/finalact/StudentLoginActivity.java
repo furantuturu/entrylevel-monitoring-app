@@ -9,8 +9,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ public class StudentLoginActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     DbManager db;
     String spUname;
+    ImageView imgView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,11 @@ public class StudentLoginActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         spUname = sharedPreferences.getString("UNAME", null);
+
+        imgView = findViewById(R.id.kidImage);
+
+        Animation fadein = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        imgView.startAnimation(fadein);
 
         listeners();
 
