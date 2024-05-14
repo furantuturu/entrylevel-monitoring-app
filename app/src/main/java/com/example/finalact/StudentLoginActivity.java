@@ -43,6 +43,7 @@ public class StudentLoginActivity extends AppCompatActivity {
         spUname = sharedPreferences.getString("UNAME", null);
 
         listeners();
+
     }
 
     private void listeners() {
@@ -75,7 +76,7 @@ public class StudentLoginActivity extends AppCompatActivity {
                             finish();
 
                         } else {
-                            Toast.makeText(StudentLoginActivity.this, "Wrong Password", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(StudentLoginActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
                         }
 
                     } catch (Exception e) {
@@ -93,10 +94,19 @@ public class StudentLoginActivity extends AppCompatActivity {
         btnStuSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StudentLoginActivity.this, SignupActivity.class);
+                Intent intent = new Intent(StudentLoginActivity.this, StudentSignUpActivity.class);
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (spUname != null) {
+            Intent intent = new Intent(StudentLoginActivity.this, QRScanActivity.class);
+            startActivity(intent);
+        }
     }
 
 
