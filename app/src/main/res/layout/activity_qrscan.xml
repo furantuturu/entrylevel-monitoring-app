@@ -15,7 +15,8 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/CameraPreview"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TVstudentname">
 
         <EditText
             android:id="@+id/ETcode"
@@ -35,7 +36,8 @@
         app:layout_constraintBottom_toTopOf="@+id/BTNenterclass"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
         android:id="@+id/BTNenterclass"
@@ -43,19 +45,28 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="11dp"
+        android:layout_marginBottom="16dp"
         android:text="Enter Class"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="616dp" />
+        app:layout_constraintTop_toBottomOf="@+id/CameraPreview" />
 
     <TextView
         android:id="@+id/TVstudentname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="62dp"
+        android:layout_marginBottom="30dp"
         android:fontFamily="casual"
         android:text="StudentName"
+        android:textAlignment="center"
         android:textSize="35sp"
-        tools:layout_editor_absoluteX="62dp"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
