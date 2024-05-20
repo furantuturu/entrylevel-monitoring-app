@@ -90,15 +90,16 @@ public class DbManager {
         return rowArray;
     }
 
-    public ArrayList<ArrayList<Object>> getAllRowsAsArrays()
+    public ArrayList<ArrayList<Object>> getAllRowsAsArrays(int access)
     {
         ArrayList<ArrayList<Object>> dataArrays = new ArrayList<ArrayList<Object>>();
         Cursor cursor;
         try {
             cursor = db.query(
                     TBLNAME,
-                    new String[]{SID, STUNAME, PWD},
-                    null, null, null, null, null
+                    new String[]{SID, STUNAME},
+                    ACCESS + " = " + access,
+                    null, null, null, null
             );
             cursor.moveToFirst();
             if (!cursor.isAfterLast()) {
@@ -106,7 +107,6 @@ public class DbManager {
                     ArrayList<Object> dataList = new ArrayList<Object>();
                     dataList.add(cursor.getLong(0));
                     dataList.add(cursor.getString(1));
-                    dataList.add(cursor.getString(2));
                     dataArrays.add(dataList);
                 }
                 while

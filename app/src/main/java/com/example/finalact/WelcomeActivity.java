@@ -1,57 +1,56 @@
 package com.example.finalact;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 public class WelcomeActivity extends AppCompatActivity {
-    TextView studentName;
-    Button btnLeaveClass;
-    SharedPreferences sharedPreferences;
-    public static final String MyPreferences = "MYPREFS";
-    String spStuNamePresent;
-    private long pressedTime;
-    DbManager db;
+    TextView studentNameWelcome;
+    Button btnLogout;
+    Bundle received;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        db = new DbManager(this);
+        studentNameWelcome = findViewById(R.id.TVstudentnamepresent);
+        btnLogout = findViewById(R.id.BTNlogout);
 
-        studentName = findViewById(R.id.TVstudentnamepresent);
-        btnLeaveClass = findViewById(R.id.BTNleaveclass);
+        studentNameWelcome.setText(studentName());
 
-        sharedPreferences = getSharedPreferences(MyPreferences, Context.MODE_PRIVATE);
-        spStuNamePresent = sharedPreferences.getString(StudentLoginActivity.UNAME, null);
+        Intent intent = new Intent(WelcomeActivity.this, MyService.class);
 
-        studentName.setText(spStuNamePresent.substring(0, 1).toUpperCase() + spStuNamePresent.substring(1).toLowerCase());
+        Bundle bundle = new Bundle();
+        String stuname = received.getString("STUDENTNAME").substring(0, 1).toUpperCase() + received.getString("STUDENTNAME").substring(1).toLowerCase();
+        bundle.putString("STUNAME", stuname);
 
-        listeners();
-    }
+        intent.putExtras(bundle);
+        startService(intent);
 
-    private void listeners() {
-        btnLeaveClass.setOnClickListener(new View.OnClickListener() {
+        btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.updateRow(0);
+                deleteData();
+                FirebaseAuth.getInstance().signOut();
 
-                @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+                Toast.makeText(WelcomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
 
-                editor.clear();
-                editor.apply();
-
-                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, StudentLoginActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -59,27 +58,41 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
-
-        if (pressedTime + 2000 > System.currentTimeMillis()) {
-            super.onBackPressed();
-
-            db.updateRow(0);
-
-            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
-
-            editor.clear();
-            editor.apply();
-
-
-            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Toast.makeText(getBaseContext(), "Press back again to leave class", Toast.LENGTH_SHORT).show();
-        }
-
-        pressedTime = System.currentTimeMillis();
+    public void onDestroy() {
+        super.onDestroy();
+        deleteData();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        deleteData();
+    }
+
+    private String studentName() {
+        received = getIntent().getExtras();
+        return received.getString("STUDENTNAME").substring(0, 1).toUpperCase() + received.getString("STUDENTNAME").substring(1).toLowerCase();
+
+    }
+
+    public void deleteData() {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query studentNameQuery = reference.child("students").orderByChild("name").equalTo(studentName());
+
+        studentNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot studentNameSS : snapshot.getChildren()) {
+                    studentNameSS.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("on cancelled", String.valueOf(error.toException()));
+            }
+        });
+    }
+
 
 }

@@ -7,7 +7,7 @@
     tools:context=".QRCodeActivity">
 
     <Button
-        android:id="@+id/BTNteclogin"
+        android:id="@+id/BTNmonitor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="96dp"

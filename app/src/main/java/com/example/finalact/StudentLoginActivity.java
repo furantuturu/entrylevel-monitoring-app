@@ -17,42 +17,38 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 public class StudentLoginActivity extends AppCompatActivity {
-    EditText etStuName, etStuPwd;
+    EditText etStuEmail, etStuPwd;
     Button btnStuSignup, btnStuLogin;
     TextView fgtPwdTec;
-    public static final String MyPREFERENCES = "MYPREFS";
-    public static final String UNAME = "UNAME_KEY";
-    SharedPreferences sharedPreferences;
-    DbManager db;
-    String spUname;
     ImageView imgView;
+    private FirebaseAuth auth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_login);
 
-        db = new DbManager(this);
 
-        etStuName = findViewById(R.id.ETstuname);
+        etStuEmail = findViewById(R.id.ETstuemail);
         etStuPwd = findViewById(R.id.ETstupwd);
         btnStuLogin = findViewById(R.id.BTNstulogin);
         btnStuSignup = findViewById(R.id.BTNstusignup);
         fgtPwdTec = findViewById(R.id.forgot_pass_stu);
-
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-
-        spUname = sharedPreferences.getString("UNAME", null);
 
         imgView = findViewById(R.id.kidImage);
 
         Animation fadein = AnimationUtils.loadAnimation(this, R.anim.fadein);
         imgView.startAnimation(fadein);
 
-        listeners();
+        auth = FirebaseAuth.getInstance();
 
+        listeners();
     }
 
     private void listeners() {
@@ -64,39 +60,17 @@ public class StudentLoginActivity extends AppCompatActivity {
             }
         });
 
+
         btnStuLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!etStuName.getText().toString().equals("") && !etStuPwd.getText().toString().equals("")) {
-                    String uname = etStuName.getText().toString();
-                    String pwd = etStuPwd.getText().toString();
+                String mail = etStuEmail.getText().toString();
+                String pwd = etStuPwd.getText().toString();
 
-                    try {
-                        ArrayList<Object> data = db.getRowAsArray(uname);
+                Bundle bundle = new Bundle();
+                bundle.putString("EMAIL", mail);
 
-                        if (pwd.equals(data.get(2).toString())) {
-                            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                            editor.putString(UNAME, data.get(1).toString());
-                            editor.apply();
-
-                            Intent intent = new Intent(StudentLoginActivity.this, QRScanActivity.class);
-                            startActivity(intent);
-                            finish();
-
-                        } else {
-                            Toast.makeText(StudentLoginActivity.this, "Incorrect Password", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("DB Error", e.toString());
-                        e.printStackTrace();
-                    }
-
-
-                } else {
-                    Toast.makeText(StudentLoginActivity.this, "Don't leave the fields blank", Toast.LENGTH_SHORT).show();
-                }
+                loginUser(mail, pwd, bundle);
             }
         });
 
@@ -109,14 +83,18 @@ public class StudentLoginActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (spUname != null) {
-            Intent intent = new Intent(StudentLoginActivity.this, QRScanActivity.class);
-            startActivity(intent);
-        }
-    }
+    private void loginUser(String mail, String pwd, Bundle bundle) {
+        auth.signInWithEmailAndPassword(mail, pwd).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                Toast.makeText(StudentLoginActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
 
+                Intent intent = new Intent(StudentLoginActivity.this, QRScanActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
 
 }

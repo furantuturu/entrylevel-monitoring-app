@@ -14,13 +14,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.util.Size;
 import android.view.View;
 import android.widget.Button;
@@ -31,41 +29,39 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 public class QRScanActivity extends AppCompatActivity {
-    TextView studentName;
-    EditText qrcodeET;
+    TextView studentEmail;
+    EditText qrcodeET, studentNameET;
     Button btnEnterClass;
     PreviewView cameraPreviewView;
     ListenableFuture<ProcessCameraProvider> cameraProviderListenableFuture;
-    public static final String MyPREFERENCES = "MYPREFS";
-    SharedPreferences sharedPreferences;
-    String spUname;
-    DbManager db;
+    Bundle received;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrscan);
 
-        db = new DbManager(this);
-
-        studentName = findViewById(R.id.TVstudentname);
+        studentEmail = findViewById(R.id.TVstudentemail);
         qrcodeET = findViewById(R.id.ETcode);
+        studentNameET = findViewById(R.id.ETstudentname);
         btnEnterClass = findViewById(R.id.BTNenterclass);
         cameraPreviewView = findViewById(R.id.CameraPreview);
 
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        spUname = sharedPreferences.getString(StudentLoginActivity.UNAME, null);
-
-        studentName.setText("Welcome, " + spUname.substring(0, 1).toUpperCase() + spUname.substring(1).toLowerCase());
+        received = getIntent().getExtras();
+        studentEmail.setText(received.getString("EMAIL"));
 
         // checking camera permissions
         if (ContextCompat.checkSelfPermission(QRScanActivity.this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -81,19 +77,39 @@ public class QRScanActivity extends AppCompatActivity {
         btnEnterClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (qrcodeET.getText().toString().equals("018f51fb-2a6c-7af0-ba64-0c9d88739aea")) {
-                    try {
-                        db.updateRow(1);
+                String studentName = studentNameET.getText().toString().substring(0, 1).toUpperCase() + studentNameET.getText().toString().substring(1).toLowerCase();
+                String mail = received.getString("EMAIL");
+                if (!TextUtils.isEmpty(studentName)) {
+                    if (qrcodeET.getText().toString().equals("018f51fb-2a6c-7af0-ba64-0c9d88739aea")) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("STUDENTNAME", studentName);
 
+                        Date dNow = new Date();
+                        SimpleDateFormat ft = new SimpleDateFormat("E yyyy.MM.dd 'at' hh:mm:ss a");
+                        String formattedDateTime = ft.format(dNow);
+
+                        HashMap<String, Object> map = new HashMap<>();
+                        map.put("name", studentName);
+                        map.put("email", mail);
+                        map.put("datetime", formattedDateTime);
+
+                        Random rand = new Random();
+                        int max = 10000, min = 1000;
+                        String randomIDNumber = Integer.toString(rand.nextInt(max - min + 1) + min);
+
+                        FirebaseDatabase.getInstance().getReference().child("students").child(randomIDNumber).updateChildren(map);
+
+                        Toast.makeText(QRScanActivity.this, "You have now entered the class", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(QRScanActivity.this, WelcomeActivity.class);
+                        intent.putExtras(bundle);
                         startActivity(intent);
-                    } catch (Exception e) {
-                        Log.e("DB Error", e.toString());
-                        e.printStackTrace();
-                    }
 
+                    } else {
+                        Toast.makeText(QRScanActivity.this, "Invalid Class Code", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(QRScanActivity.this, "Invalid Class Code", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(QRScanActivity.this, "Name shouldn't be blank", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
