@@ -3,7 +3,10 @@ package com.example.finalact;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class WelcomeActivity extends AppCompatActivity {
     TextView studentNameWelcome;
     Button btnLogout;
-    Bundle received;
+    String studentName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,21 +34,23 @@ public class WelcomeActivity extends AppCompatActivity {
         studentNameWelcome = findViewById(R.id.TVstudentnamepresent);
         btnLogout = findViewById(R.id.BTNlogout);
 
-        studentNameWelcome.setText(studentName());
+        Bundle received = getIntent().getExtras();
+        studentName = received.getString("STUDENTNAME").substring(0, 1).toUpperCase() + received.getString("STUDENTNAME").substring(1).toLowerCase();
+
+        studentNameWelcome.setText(studentName);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPrefs", WelcomeActivity.MODE_PRIVATE);
+        @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("stuname", studentName);
+        editor.apply();
 
         Intent intent = new Intent(WelcomeActivity.this, MyService.class);
-
-        Bundle bundle = new Bundle();
-        String stuname = received.getString("STUDENTNAME").substring(0, 1).toUpperCase() + received.getString("STUDENTNAME").substring(1).toLowerCase();
-        bundle.putString("STUNAME", stuname);
-
-        intent.putExtras(bundle);
         startService(intent);
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteData();
+                deleteData(studentName);
                 FirebaseAuth.getInstance().signOut();
 
                 Toast.makeText(WelcomeActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
@@ -60,24 +65,19 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        deleteData();
+        deleteData(studentName);
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        deleteData();
+        deleteData(studentName);
     }
 
-    private String studentName() {
-        received = getIntent().getExtras();
-        return received.getString("STUDENTNAME").substring(0, 1).toUpperCase() + received.getString("STUDENTNAME").substring(1).toLowerCase();
 
-    }
-
-    public void deleteData() {
+    public void deleteData(String stuName) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        Query studentNameQuery = reference.child("students").orderByChild("name").equalTo(studentName());
+        Query studentNameQuery = reference.child("students").orderByChild("name").equalTo(stuName);
 
         studentNameQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -96,3 +96,4 @@ public class WelcomeActivity extends AppCompatActivity {
 
 
 }
+
