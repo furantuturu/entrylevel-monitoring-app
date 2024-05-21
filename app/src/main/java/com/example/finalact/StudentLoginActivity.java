@@ -64,13 +64,18 @@ public class StudentLoginActivity extends AppCompatActivity {
         btnStuLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String mail = etStuEmail.getText().toString();
-                String pwd = etStuPwd.getText().toString();
 
-                Bundle bundle = new Bundle();
-                bundle.putString("EMAIL", mail);
+                if(etStuEmail.getText().toString().isEmpty() || etStuPwd.getText().toString().isEmpty()){
+                    Toast.makeText(StudentLoginActivity.this, "Please fill the fields!" , Toast.LENGTH_SHORT).show();
+                }else {
+                    String mail = etStuEmail.getText().toString();
+                    String pwd = etStuPwd.getText().toString();
 
-                loginUser(mail, pwd, bundle);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("EMAIL", mail);
+
+                    loginUser(mail, pwd, bundle);
+                }
             }
         });
 
