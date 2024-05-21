@@ -1,5 +1,6 @@
 package com.example.finalact;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -64,18 +67,18 @@ public class StudentLoginActivity extends AppCompatActivity {
         btnStuLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if(etStuEmail.getText().toString().isEmpty() || etStuPwd.getText().toString().isEmpty()){
-                    Toast.makeText(StudentLoginActivity.this, "Please fill the fields!" , Toast.LENGTH_SHORT).show();
-                }else {
-                    String mail = etStuEmail.getText().toString();
-                    String pwd = etStuPwd.getText().toString();
-
+                String mail = etStuEmail.getText().toString();
+                String pwd = etStuPwd.getText().toString();
+                if (!TextUtils.isEmpty(mail) || !TextUtils.isEmpty(pwd)) {
                     Bundle bundle = new Bundle();
                     bundle.putString("EMAIL", mail);
 
                     loginUser(mail, pwd, bundle);
+                } else {
+                    Toast.makeText(StudentLoginActivity.this, "Please fill in the fields", Toast.LENGTH_SHORT).show();
                 }
+
+
             }
         });
 
@@ -98,6 +101,13 @@ public class StudentLoginActivity extends AppCompatActivity {
                 intent.putExtras(bundle);
                 startActivity(intent);
                 finish();
+            }
+        });
+
+        auth.signInWithEmailAndPassword(mail, pwd).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(StudentLoginActivity.this, "Login Failed", Toast.LENGTH_SHORT).show();
             }
         });
     }
