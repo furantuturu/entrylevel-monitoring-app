@@ -8,8 +8,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import java.util.Objects;
 
 public class StudentSignUpActivity extends AppCompatActivity {
     EditText email,password, username;
+    ImageView imageView;
     Button btn;
     DbManager db;
     private FirebaseAuth auth;
@@ -45,8 +49,13 @@ public class StudentSignUpActivity extends AppCompatActivity {
         email = findViewById(R.id.txtEmail);
         password = findViewById(R.id.txtPassword);
         btn = findViewById(R.id.btnSignUp);
-
+        imageView = findViewById(R.id.sign_up_image);
         auth = FirebaseAuth.getInstance();
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        imageView.startAnimation(animation);
+
+
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

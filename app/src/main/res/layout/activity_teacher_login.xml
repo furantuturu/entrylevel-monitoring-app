@@ -11,14 +11,16 @@
         android:layout_width="264dp"
         android:layout_height="39dp"
         android:layout_marginStart="55dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="41dp"
-        android:text="Welcome teacher!"
+        android:text="Welcome, Teacher!"
         android:textAlignment="center"
-        android:textAllCaps="true"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teacherImg" />
 
@@ -35,68 +37,42 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/teach" />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="58dp"
-        android:layout_marginTop="88dp"
-        android:layout_marginEnd="239dp"
-        android:text="Username"
-        android:textAllCaps="true"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.92"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teacherImg" />
-
     <EditText
         android:id="@+id/ETtecname"
         android:layout_width="277dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="52dp"
         android:layout_marginEnd="13dp"
         android:ems="10"
+        android:hint="Email"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="242dp"
-        android:text="Password"
-        android:textAllCaps="true"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.814"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ETtecname" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <EditText
         android:id="@+id/ETtecpwd"
         android:layout_width="277dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="13dp"
         android:ems="10"
+        android:hint="Password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
+        app:layout_constraintTop_toBottomOf="@+id/ETtecname" />
 
     <TextView
         android:id="@+id/forgotPasswordTec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="184dp"
         android:text="Forgot your password?"
         app:layout_constraintEnd_toEndOf="parent"
@@ -106,15 +82,13 @@
     <Button
         android:id="@+id/BTNtecsignup"
         android:layout_width="326dp"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="11dp"
-        android:layout_marginBottom="72dp"
         android:text="Sign Up"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.692"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/BTNteclogin" />
 
@@ -123,13 +97,12 @@
         android:layout_width="326dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="13dp"
         android:layout_marginEnd="128dp"
-        android:layout_marginBottom="10dp"
         android:text="Log In"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/BTNtecsignup"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/forgotPasswordTec" />
 </androidx.constraintlayout.widget.ConstraintLayout>
