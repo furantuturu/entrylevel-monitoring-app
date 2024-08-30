@@ -1,1 +1,1 @@
-# Monitoring app for our project in Mobile Programming
+# QRCode monitoring app for our project in Mobile Programming
